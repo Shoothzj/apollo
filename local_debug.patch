@@ -1,0 +1,53 @@
+Subject: [PATCH] local debug
+---
+Index: apollo-configservice/src/main/java/com/ctrip/framework/apollo/metaservice/service/DefaultDiscoveryService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/apollo-configservice/src/main/java/com/ctrip/framework/apollo/metaservice/service/DefaultDiscoveryService.java b/apollo-configservice/src/main/java/com/ctrip/framework/apollo/metaservice/service/DefaultDiscoveryService.java
+--- a/apollo-configservice/src/main/java/com/ctrip/framework/apollo/metaservice/service/DefaultDiscoveryService.java	(revision 6ab25eed60b09ede4cfca3752cd7ac5d59532535)
++++ b/apollo-configservice/src/main/java/com/ctrip/framework/apollo/metaservice/service/DefaultDiscoveryService.java	(date 1677770783502)
+@@ -64,7 +64,7 @@
+     ServiceDTO service = new ServiceDTO();
+     service.setAppName(instance.getAppName());
+     service.setInstanceId(instance.getInstanceId());
+-    service.setHomepageUrl(instance.getHomePageUrl());
++    service.setHomepageUrl("http://localhost:8090");
+     return service;
+   };
+ }
+Index: apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.java b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.java
+--- a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.java	(revision 6ab25eed60b09ede4cfca3752cd7ac5d59532535)
++++ b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/component/RetryableRestTemplate.java	(date 1677770783504)
+@@ -300,7 +300,7 @@
+   }
+ 
+   private String parseHost(ServiceDTO serviceAddress) {
+-    return serviceAddress.getHomepageUrl() + "/";
++    return "http://localhost:8090" + "/";
+   }
+ 
+   //post,delete,put请求在admin server处理超时情况下不重试
+Index: apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/SystemInfoController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/SystemInfoController.java b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/SystemInfoController.java
+--- a/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/SystemInfoController.java	(revision 6ab25eed60b09ede4cfca3752cd7ac5d59532535)
++++ b/apollo-portal/src/main/java/com/ctrip/framework/apollo/portal/controller/SystemInfoController.java	(date 1677770783506)
+@@ -116,7 +116,7 @@
+       throw new IllegalArgumentException("No such instance of instanceId: " + instanceId);
+     }
+ 
+-    return restTemplate.getForObject(service.getHomepageUrl() + "/health", Health.class);
++    return restTemplate.getForObject("http://localhost:8090" + "/health", Health.class);
+   }
+ 
+   private EnvironmentInfo adaptEnv2EnvironmentInfo(final Env env) {
