@@ -15,12 +15,12 @@
 --
 INSERT INTO "App" ( `AppId`, `Name`, `OrgId`, `OrgName`, `OwnerName`, `OwnerEmail`, `IsDeleted`, `DataChange_CreatedBy`, `DataChange_LastModifiedBy`)VALUES('testApp', 'test', 'default', 'default', 'default', 'default', 0, 'default', 'default');
 
-INSERT INTO "Cluster" (`ID`, `Name`, `AppId`, `ParentClusterId`, `IsDeleted`, `DataChange_CreatedBy`, `DataChange_LastModifiedBy`) VALUES (1, 'default', 'testApp', 0, 0, 'default', 'default');
+INSERT INTO "Cluster" (`Id`, `Name`, `AppId`, `ParentClusterId`, `IsDeleted`, `DataChange_CreatedBy`, `DataChange_LastModifiedBy`) VALUES (1, 'default', 'testApp', 0, 0, 'default', 'default');
 INSERT INTO "Cluster" (`Name`, `AppId`, `ParentClusterId`, `IsDeleted`, `DataChange_CreatedBy`, `DataChange_LastModifiedBy`)VALUES('child-cluster', 'testApp', 1, 0, 'default', 'default');
 
 INSERT INTO "AppNamespace" (`Name`, `AppId`, `Format`, `IsPublic`) VALUES ( 'application', 'testApp', 'properties', 0);
 
-INSERT INTO "Namespace" (`ID`, `AppId`, `ClusterName`, `NamespaceName`, `IsDeleted`, `DataChange_CreatedBy`, `DataChange_LastModifiedBy`)VALUES(1,'testApp', 'default', 'application', 0, 'apollo', 'apollo');
+INSERT INTO "Namespace" (`Id`, `AppId`, `ClusterName`, `NamespaceName`, `IsDeleted`, `DataChange_CreatedBy`, `DataChange_LastModifiedBy`)VALUES(1,'testApp', 'default', 'application', 0, 'apollo', 'apollo');
 INSERT INTO "Namespace" (`AppId`, `ClusterName`, `NamespaceName`, `IsDeleted`, `DataChange_CreatedBy`, `DataChange_LastModifiedBy`)VALUES('testApp', 'child-cluster', 'application', 0, 'apollo', 'apollo');
 
 INSERT INTO "Commit" (`ChangeSets`, `AppId`, `ClusterName`, `NamespaceName`)VALUES('{}', 'testApp', 'default', 'application');
@@ -35,7 +35,7 @@ INSERT INTO "Release" (`AppId`, `ClusterName`, `NamespaceName`, `Configurations`
 
 INSERT INTO "ReleaseHistory" (`AppId`, `ClusterName`, `NamespaceName`, `BranchName`, `ReleaseId`, `PreviousReleaseId`, `Operation`, `OperationContext`)VALUES('branch-test', 'default', 'application', 'default', 0, 0, 7, '{}');
 
-INSERT INTO "InstanceConfig" (`ID`, `InstanceId`, `ConfigAppId`, `ConfigClusterName`, `ConfigNamespaceName`, `ReleaseKey`, `ReleaseDeliveryTime`, `DataChange_CreatedTime`, `DataChange_LastTime`)
+INSERT INTO "InstanceConfig" (`Id`, `InstanceId`, `ConfigAppId`, `ConfigClusterName`, `ConfigNamespaceName`, `ReleaseKey`, `ReleaseDeliveryTime`, `DataChange_CreatedTime`, `DataChange_LastTime`)
 VALUES
 	(1, 90, 'testApp', 'default', 'application', '20160829134524-dee271ddf9fced58', '2016-08-29 13:45:24', '2016-08-30 17:03:32', '2016-10-19 11:13:47');
 

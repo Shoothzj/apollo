@@ -31,7 +31,7 @@ import javax.persistence.Table;
 @Where(clause = "IsDeleted = false")
 public class Namespace extends BaseEntity {
 
-  @Column(name = "appId", nullable = false)
+  @Column(name = "AppId", nullable = false)
   private String appId;
 
   @Column(name = "ClusterName", nullable = false)

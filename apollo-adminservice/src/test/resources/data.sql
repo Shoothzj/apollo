@@ -32,7 +32,7 @@ INSERT INTO "AppNamespace" (AppId, Name) VALUES ('100003172', 'application');
 INSERT INTO "AppNamespace" (AppId, Name) VALUES ('100003172', 'fx.apollo.admin');
 INSERT INTO "AppNamespace" (AppId, Name) VALUES ('100003173', 'application');
 INSERT INTO "AppNamespace" (AppId, Name) VALUES ('100003173', 'fx.apollo.portal');
-INSERT INTO "AppNamespace" (AppID, Name) VALUES ('fxhermesproducer', 'fx.hermes.producer');
+INSERT INTO "AppNamespace" (AppId, Name) VALUES ('fxhermesproducer', 'fx.hermes.producer');
 
 INSERT INTO "Namespace" (Id, AppId, ClusterName, NamespaceName) VALUES (1, '100003171', 'default', 'application');
 INSERT INTO "Namespace" (Id, AppId, ClusterName, NamespaceName) VALUES (5, '100003171', 'cluster1', 'application');
