@@ -16,19 +16,6 @@
 
 \c
 "ApolloPortalDB"
-/* # Create TRGGER */
-/* # ------------------------------------------------------------ */
-
-CREATE
-OR REPLACE FUNCTION apolloportal.update_modified_column() RETURNS TRIGGER AS $$
-BEGIN
-	NEW.DataChange_LastTime
-= now();
-RETURN NEW;
-END;
-$$
-language 'plpgsql';
-
 /* # Dump of table app */
 /* # ------------------------------------------------------------ */
 
@@ -43,7 +30,7 @@ CREATE TABLE apolloportal."App"
     "OrgName"                   varchar(64)  NOT NULL DEFAULT 'default',         -- COMMENT '部门名字'
     "OwnerName"                 varchar(500) NOT NULL DEFAULT 'default',         -- COMMENT 'ownerName'
     "OwnerEmail"                varchar(500) NOT NULL DEFAULT 'default',         -- COMMENT 'ownerEmail'
-    "IsDeleted"                 bit          NOT NULL DEFAULT b'0',              -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL         NOT NULL DEFAULT false,             -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT       NOT NULL DEFAULT '0',               -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64)  NOT NULL DEFAULT 'default',         -- COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP, -- COMMENT '创建时间'
@@ -55,10 +42,6 @@ CREATE TABLE apolloportal."App"
 
 CREATE INDEX "App_Name_AppId" ON apolloportal."App" ("Name");
 CREATE INDEX "App_DataChange_LastTime" ON apolloportal."App" ("DataChange_LastTime");
-CREATE TRIGGER "App_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."App"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 /* # Dump of table appnamespace */
 /* # ------------------------------------------------------------ */
@@ -71,9 +54,9 @@ CREATE TABLE apolloportal."AppNamespace"
     "Name"                      varchar(32) NOT NULL DEFAULT '',                -- COMMENT 'namespace名字，注意，需要全局唯一'
     "AppId"                     varchar(64) NOT NULL DEFAULT '',                -- COMMENT 'app id'
     "Format"                    varchar(32) NOT NULL DEFAULT 'properties',      -- COMMENT 'namespace的format类型'
-    "IsPublic"                  bit         NOT NULL DEFAULT b'0',              -- COMMENT 'namespace是否为公共'
+    "IsPublic"                  BOOL        NOT NULL DEFAULT false,             -- COMMENT 'namespace是否为公共'
     "Comment"                   varchar(64) NOT NULL DEFAULT '',                -- COMMENT '注释'
-    "IsDeleted"                 bit         NOT NULL DEFAULT b'0',              -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL        NOT NULL DEFAULT false,             -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT      NOT NULL DEFAULT '0',               -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64) NOT NULL DEFAULT 'default',         -- COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP, -- COMMENT '创建时间'
@@ -85,10 +68,6 @@ CREATE TABLE apolloportal."AppNamespace"
 
 CREATE INDEX "AppNamespace_Name_AppId" ON apolloportal."AppNamespace" ("Name", "AppId");
 CREATE INDEX "AppNamespace_DataChange_LastTime" ON apolloportal."AppNamespace" ("DataChange_LastTime");
-CREATE TRIGGER "AppNamespace_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."AppNamespace"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 /* # Dump of table consumer */
 /* # ------------------------------------------------------------ */
@@ -104,7 +83,7 @@ CREATE TABLE apolloportal."Consumer"
     "OrgName"                   varchar(64)  NOT NULL DEFAULT 'default',         -- COMMENT '部门名字'
     "OwnerName"                 varchar(500) NOT NULL DEFAULT 'default',         -- COMMENT 'ownerName'
     "OwnerEmail"                varchar(500) NOT NULL DEFAULT 'default',         -- COMMENT 'ownerEmail'
-    "IsDeleted"                 bit          NOT NULL DEFAULT b'0',              -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL         NOT NULL DEFAULT false,             -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT       NOT NULL DEFAULT '0',               -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64)  NOT NULL DEFAULT 'default',         -- COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP, -- COMMENT '创建时间'
@@ -115,10 +94,6 @@ CREATE TABLE apolloportal."Consumer"
 );
 
 CREATE INDEX "Consumer_IX_DataChange_LastTime" ON apolloportal."Consumer" ("DataChange_LastTime");
-CREATE TRIGGER "Consumer_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."Consumer"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 /* # Dump of table consumeraudit */
 /* # ------------------------------------------------------------ */
@@ -138,10 +113,6 @@ CREATE TABLE apolloportal."ConsumerAudit"
 
 CREATE INDEX "ConsumerAudit_IX_ConsumerId" ON apolloportal."ConsumerAudit" ("ConsumerId");
 CREATE INDEX "ConsumerAudit_IX_DataChange_LastTime" ON apolloportal."ConsumerAudit" ("DataChange_LastTime");
-CREATE TRIGGER "ConsumerAudit_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."ConsumerAudit"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 
 /* # Dump of table consumerrole */
@@ -154,7 +125,7 @@ CREATE TABLE apolloportal."ConsumerRole"
     "Id"                        BIGSERIAL,                                      -- COMMENT '自增Id'
     "ConsumerId"                int                  DEFAULT NULL,              -- COMMENT 'Consumer Id'
     "RoleId"                    int                  DEFAULT NULL,              -- COMMENT 'Role Id'
-    "IsDeleted"                 bit         NOT NULL DEFAULT b'0',              -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL        NOT NULL DEFAULT false,             -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT      NOT NULL DEFAULT '0',               -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64) NOT NULL DEFAULT 'default',         -- COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP, -- COMMENT '创建时间'
@@ -166,10 +137,6 @@ CREATE TABLE apolloportal."ConsumerRole"
 
 CREATE INDEX "ConsumerRole_IX_RoleId" ON apolloportal."ConsumerRole" ("RoleId");
 CREATE INDEX "ConsumerRole_IX_DataChange_LastTime" ON apolloportal."ConsumerRole" ("DataChange_LastTime");
-CREATE TRIGGER "ConsumerToken_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."ConsumerRole"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 /* # Dump of table consumertoken */
 /* # ------------------------------------------------------------ */
@@ -182,7 +149,7 @@ CREATE TABLE apolloportal."ConsumerToken"
     "ConsumerId"                int                   DEFAULT NULL,                  -- COMMENT 'ConsumerId'
     "Token"                     varchar(128) NOT NULL DEFAULT '',                    -- COMMENT 'token'
     "Expires"                   timestamp    NOT NULL DEFAULT '2099-01-01 00:00:00', --  COMMENT 'token失效时间'
-    "IsDeleted"                 bit          NOT NULL DEFAULT b'0',                  -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL         NOT NULL DEFAULT false,                 -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT       NOT NULL DEFAULT '0',                   -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64)  NOT NULL DEFAULT 'default',             -- COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,     -- COMMENT '创建时间'
@@ -193,10 +160,6 @@ CREATE TABLE apolloportal."ConsumerToken"
 );
 
 CREATE INDEX "ConsumerToken_DataChange_LastTime" ON apolloportal."ConsumerToken" ("DataChange_LastTime");
-CREATE TRIGGER "ConsumerToken_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."ConsumerToken"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 /* # Dump of table favorite */
 /* # ------------------------------------------------------------ */
@@ -209,7 +172,7 @@ CREATE TABLE apolloportal."Favorite"
     "UserId"                    varchar(32) NOT NULL DEFAULT 'default',         -- COMMENT '收藏的用户'
     "AppId"                     varchar(64) NOT NULL DEFAULT 'default',         -- COMMENT 'AppID'
     "Position"                  int         NOT NULL DEFAULT '10000',           -- COMMENT '收藏顺序'
-    "IsDeleted"                 bit         NOT NULL DEFAULT b'0',              -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL        NOT NULL DEFAULT false,             -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT      NOT NULL DEFAULT '0',               -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64) NOT NULL DEFAULT 'default',         -- COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP, -- COMMENT '创建时间'
@@ -221,10 +184,6 @@ CREATE TABLE apolloportal."Favorite"
 
 CREATE INDEX "Favorite_AppId" ON apolloportal."Favorite" ("AppId");
 CREATE INDEX "Favorite_DataChange_LastTime" ON apolloportal."Favorite" ("DataChange_LastTime");
-CREATE TRIGGER "Favorite_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."Favorite"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 /* # Dump of table permission */
 /* # ------------------------------------------------------------ */
@@ -236,7 +195,7 @@ CREATE TABLE apolloportal."Permission"
     "Id"                        BIGSERIAL,                                       -- COMMENT '自增Id'
     "PermissionType"            varchar(32)  NOT NULL DEFAULT '',                -- COMMENT '权限类型'
     "TargetId"                  varchar(256) NOT NULL DEFAULT '',                -- COMMENT '权限对象类型'
-    "IsDeleted"                 bit          NOT NULL DEFAULT b'0',              -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL         NOT NULL DEFAULT false,             -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT       NOT NULL DEFAULT '0',               -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64)  NOT NULL DEFAULT 'default',         -- COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP, -- COMMENT '创建时间'
@@ -247,10 +206,6 @@ CREATE TABLE apolloportal."Permission"
 );
 
 CREATE INDEX "Permission_IX_DataChange_LastTime" ON apolloportal."Permission" ("DataChange_LastTime");
-CREATE TRIGGER "Permission_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."Permission"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 /* # Dump of table role */
 /* # ------------------------------------------------------------ */
@@ -261,7 +216,7 @@ CREATE TABLE apolloportal."Role"
 (
     "Id"                        BIGSERIAL,                                       -- COMMENT '自增Id'
     "RoleName"                  varchar(256) NOT NULL DEFAULT '',                -- COMMENT 'Role name'
-    "IsDeleted"                 bit          NOT NULL DEFAULT b'0',              -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL         NOT NULL DEFAULT false,             -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT       NOT NULL DEFAULT '0',               -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64)  NOT NULL DEFAULT 'default',         --  COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP, -- COMMENT '创建时间'
@@ -272,10 +227,6 @@ CREATE TABLE apolloportal."Role"
 );
 
 CREATE INDEX "Role_IX_DataChange_LastTime" ON apolloportal."Role" ("DataChange_LastTime");
-CREATE TRIGGER "Role_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."Role"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 /* # Dump of table rolepermission */
 /* # ------------------------------------------------------------ */
@@ -287,7 +238,7 @@ CREATE TABLE apolloportal."RolePermission"
     "Id"                        BIGSERIAL,                                      -- COMMENT '自增Id'
     "RoleId"                    int                  DEFAULT NULL,              -- COMMENT 'Role Id'
     "PermissionId"              int                  DEFAULT NULL,              -- COMMENT 'Permission Id'
-    "IsDeleted"                 bit         NOT NULL DEFAULT b'0',              -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL        NOT NULL DEFAULT false,             -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT      NOT NULL DEFAULT '0',               -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64) NOT NULL DEFAULT 'default',         -- COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP, -- COMMENT '创建时间'
@@ -299,10 +250,6 @@ CREATE TABLE apolloportal."RolePermission"
 
 CREATE INDEX "RolePermission_IX_DataChange_LastTime" ON apolloportal."RolePermission" ("DataChange_LastTime");
 CREATE INDEX "RolePermission_IX_PermissionId" ON apolloportal."RolePermission" ("PermissionId");
-CREATE TRIGGER "RolePermission_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."RolePermission"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 
 /* # Dump of table serverconfig */
@@ -316,7 +263,7 @@ CREATE TABLE apolloportal."ServerConfig"
     "Key"                       varchar(64)   NOT NULL DEFAULT 'default',         -- COMMENT '配置项Key'
     "Value"                     varchar(2048) NOT NULL DEFAULT 'default',         -- COMMENT '配置项值'
     "Comment"                   varchar(1024)          DEFAULT '',                -- COMMENT '注释'
-    "IsDeleted"                 bit           NOT NULL DEFAULT b'0',              -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL          NOT NULL DEFAULT false,             -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT        NOT NULL DEFAULT '0',               -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64)   NOT NULL DEFAULT 'default',         -- COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP, -- COMMENT '创建时间'
@@ -327,10 +274,6 @@ CREATE TABLE apolloportal."ServerConfig"
 );
 
 CREATE INDEX "ServerConfig_IX_DataChange_LastTime" ON apolloportal."ServerConfig" ("DataChange_LastTime");
-CREATE TRIGGER ServerConfig_update_DataChange_LastTime
-    BEFORE UPDATE
-    ON apolloportal."ServerConfig"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 /* # Dump of table userrole */
 /* # ------------------------------------------------------------ */
@@ -342,7 +285,7 @@ CREATE TABLE apolloportal."UserRole"
     "Id"                        BIGSERIAL,                                      -- COMMENT '自增Id'
     "UserId"                    varchar(128)         DEFAULT '',                -- COMMENT '用户身份标识'
     "RoleId"                    int                  DEFAULT NULL,              -- COMMENT 'Role Id'
-    "IsDeleted"                 bit         NOT NULL DEFAULT b'0',              -- COMMENT '1: deleted, 0: normal'
+    "IsDeleted"                 BOOL        NOT NULL DEFAULT false,             -- COMMENT '1: deleted, 0: normal'
     "DeletedAt"                 BIGINT      NOT NULL DEFAULT '0',               -- COMMENT 'Delete timestamp based on milliseconds'
     "DataChange_CreatedBy"      varchar(64) NOT NULL DEFAULT 'default',         --  COMMENT '创建人邮箱前缀'
     "DataChange_CreatedTime"    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP, -- COMMENT '创建时间'
@@ -354,10 +297,6 @@ CREATE TABLE apolloportal."UserRole"
 
 CREATE INDEX "UserRole_IX_DataChange_LastTime" ON apolloportal."UserRole" ("DataChange_LastTime");
 CREATE INDEX "UserRole_IX_RoleId" ON apolloportal."UserRole" ("RoleId");
-CREATE TRIGGER "UserRole_update_DataChange_LastTime"
-    BEFORE UPDATE
-    ON apolloportal."UserRole"
-    FOR EACH ROW EXECUTE PROCEDURE apolloportal.update_modified_column();
 
 /* # Dump of table Users */
 /* # ------------------------------------------------------------ */
@@ -425,15 +364,17 @@ CREATE TABLE apolloportal.SPRING_SESSION
     CONSTRAINT SPRING_SESSION_PK PRIMARY KEY (PRIMARY_ID)
 );
 
-CREATE UNIQUE INDEX SPRING_SESSION_IX1 ON SPRING_SESSION (SESSION_ID);
-CREATE INDEX SPRING_SESSION_IX2 ON SPRING_SESSION (EXPIRY_TIME);
-CREATE INDEX SPRING_SESSION_IX3 ON SPRING_SESSION (PRINCIPAL_NAME);
+CREATE UNIQUE INDEX SPRING_SESSION_IX1 ON apolloportal.SPRING_SESSION (SESSION_ID);
+CREATE INDEX SPRING_SESSION_IX2 ON apolloportal.SPRING_SESSION (EXPIRY_TIME);
+CREATE INDEX SPRING_SESSION_IX3 ON apolloportal.SPRING_SESSION (PRINCIPAL_NAME);
 
 CREATE TABLE apolloportal.SPRING_SESSION_ATTRIBUTES
 (
     SESSION_PRIMARY_ID CHAR(36)     NOT NULL,
     ATTRIBUTE_NAME     VARCHAR(200) NOT NULL,
     ATTRIBUTE_BYTES    BYTEA        NOT NULL,
-    CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
-    CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) REFERENCES SPRING_SESSION (PRIMARY_ID) ON DELETE CASCADE
+    CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME)
 );
+
+alter table apolloportal.SPRING_SESSION_ATTRIBUTES
+    add constraint SPRING_SESSION_ATTRIBUTES_FK foreign key (SESSION_PRIMARY_ID) references apolloportal.SPRING_SESSION (PRIMARY_ID);
