@@ -14,8 +14,7 @@
 -- limitations under the License.
 --
 
-\c
-"ApolloPortalDB"
+\c "ApolloPortalDB"
 /* # Dump of table app */
 /* # ------------------------------------------------------------ */
 

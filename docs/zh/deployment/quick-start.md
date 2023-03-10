@@ -334,24 +334,27 @@ app.id=你的appId
 
 ## 5.3 配置其他数据库连接信息
 
+Apollo服务端需要知道如何连接到你前面创建的数据库，所以需要编辑[demo.sh](https://github.com/nobodyiam/apollo-build-scripts/blob/master/demo.sh)，修改ApolloPortalDB和ApolloConfigDB相关的数据库连接串信息。
+
 ```
-# apollo portal db info
-apollo_portal_db_url="jdbc:postgresql://localhost:5432/ApolloPortalDB?currentSchema=apolloconfig&characterEncoding=utf8"
-apollo_portal_db_username=用户名
-apollo_portal_db_password=密码（如果没有密码，留空即可）
+# database platform
 spring_profiles_group_github=postgre
 
+# apollo portal db info
+apollo_portal_db_url="jdbc:postgresql://localhost:5432/ApolloPortalDB?currentSchema=apolloportal&characterEncoding=utf8"
+apollo_portal_db_username=用户名
+apollo_portal_db_password=密码（如果没有密码，留空即可）
 
 #apollo config db info
 apollo_config_db_url="jdbc:postgresql://localhost:5432/ApolloConfigDB?currentSchema=apolloconfig&characterEncoding=utf8"
 apollo_config_db_username=用户名
 apollo_config_db_password=密码（如果没有密码，留空即可）
-spring_profiles_group_github=postgre
 
 ```
 
 ## 5.4 配置mysql数据库连接信息
 
+Apollo服务端需要知道如何连接到你前面创建的数据库，所以需要编辑[demo.sh](https://github.com/nobodyiam/apollo-build-scripts/blob/master/demo.sh)，修改ApolloPortalDB和ApolloConfigDB相关的数据库连接串信息。
 ``` 
 #apollo config db info
 apollo_config_db_url="jdbc:mysql://localhost:3306/ApolloConfigDB?characterEncoding=utf8&serverTimezone=Asia/Shanghai"
