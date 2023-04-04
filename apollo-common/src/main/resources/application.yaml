@@ -15,6 +15,9 @@
 #
 
 spring:
+  datasource:
+    hikari:
+      auto-commit: 'false'
   jpa:
     properties:
       hibernate:
